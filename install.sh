@@ -1,0 +1,86 @@
+#!/bin/bash
+
+set -e
+
+echo "🚀 macOS DevOps Workstation Setup"
+echo "=================================="
+echo ""
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo "Select installation profile:"
+echo "1) Essential (brew + basic tools)"
+echo "2) Full DevOps Stack (all tools + configs)"
+echo "3) Custom (choose components)"
+echo ""
+read -p "Choice [1-3]: " profile
+
+case $profile in
+  1)
+    echo "Installing Essential profile..."
+    components=("brew")
+    ;;
+  2)
+    echo "Installing Full DevOps Stack..."
+    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "dotfiles")
+    ;;
+  3)
+    echo "Available components:"
+    echo "  [1] Homebrew packages"
+    echo "  [2] CLI tools"
+    echo "  [3] Kubernetes tools"
+    echo "  [4] Cloud provider tools"
+    echo "  [5] Dotfiles"
+    read -p "Select components (e.g., 1,2,5): " choices
+    components=()
+    [[ $choices =~ 1 ]] && components+=("brew")
+    [[ $choices =~ 2 ]] && components+=("cli-tools")
+    [[ $choices =~ 3 ]] && components+=("kubernetes")
+    [[ $choices =~ 4 ]] && components+=("cloud-tools")
+    [[ $choices =~ 5 ]] && components+=("dotfiles")
+    ;;
+  *)
+    echo "Invalid choice"
+    exit 1
+    ;;
+esac
+
+for component in "${components[@]}"; do
+  echo ""
+  echo "📦 Installing $component..."
+
+  case $component in
+    brew)
+      if [ -f "$SCRIPT_DIR/scripts/brew.sh" ]; then
+        bash "$SCRIPT_DIR/scripts/brew.sh"
+      else
+        echo "Installing Homebrew packages from Brewfile..."
+        if command -v brew >/dev/null 2>&1; then
+          brew bundle --file="$SCRIPT_DIR/Brewfile"
+        else
+          echo "Homebrew not installed. Install from https://brew.sh"
+        fi
+      fi
+      ;;
+    cli-tools)
+      [ -f "$SCRIPT_DIR/scripts/cli-tools.sh" ] && bash "$SCRIPT_DIR/scripts/cli-tools.sh"
+      ;;
+    kubernetes)
+      [ -f "$SCRIPT_DIR/scripts/kubernetes.sh" ] && bash "$SCRIPT_DIR/scripts/kubernetes.sh"
+      ;;
+    cloud-tools)
+      [ -f "$SCRIPT_DIR/scripts/cloud-tools.sh" ] && bash "$SCRIPT_DIR/scripts/cloud-tools.sh"
+      ;;
+    dotfiles)
+      [ -f "$SCRIPT_DIR/scripts/symlink-dotfiles.sh" ] && bash "$SCRIPT_DIR/scripts/symlink-dotfiles.sh"
+      ;;
+  esac
+done
+
+echo ""
+echo "✅ Installation complete!"
+echo ""
+echo "Next steps:"
+echo "  - Restart your terminal"
+echo "  - Run 'brew doctor' to verify setup"
+echo "  - Configure cloud provider credentials"
