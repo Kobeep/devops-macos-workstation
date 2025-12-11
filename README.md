@@ -6,6 +6,13 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
+![macOS](https://img.shields.io/badge/macOS-11.0+-blue?logo=apple&logoColor=white)
+![Homebrew](https://img.shields.io/badge/Homebrew-required-orange?logo=homebrew&logoColor=white)
+![Shell Script](https://img.shields.io/badge/Shell_Script-bash-green?logo=gnu-bash&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-tools-326CE5?logo=kubernetes&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-supported-7B42BC?logo=terraform&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-included-2496ED?logo=docker&logoColor=white)
+
 <br />
 <div align="center">
   <h3 align="center">DevOps macOS Workstation</h3>
