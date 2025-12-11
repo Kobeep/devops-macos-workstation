@@ -13,7 +13,7 @@ echo "1) Essential (brew + basic tools)"
 echo "2) Full DevOps Stack (all tools + configs + macOS settings)"
 echo "3) Custom (choose components)"
 echo ""
-read -p "Choice [1-3]: " profile
+read -r -p "Choice [1-3]: " profile
 
 case $profile in
   1)
@@ -33,7 +33,7 @@ case $profile in
     echo "  [5] Desktop applications"
     echo "  [6] Dotfiles"
     echo "  [7] macOS preferences"
-    read -p "Select components (e.g., 1,2,5,7): " choices
+    read -r -p "Select components (e.g., 1,2,5,7): " choices
     components=()
     [[ $choices =~ 1 ]] && components+=("brew")
     [[ $choices =~ 2 ]] && components+=("cli-tools")
