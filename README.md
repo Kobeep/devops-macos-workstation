@@ -1,5 +1,11 @@
 <a id="readme-top"></a>
 
+<div align="center">
+  <img src="docs/banner.svg" alt="DevOps macOS Workstation Banner" width="100%">
+</div>
+
+<br />
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
