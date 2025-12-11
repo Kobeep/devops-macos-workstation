@@ -22,7 +22,7 @@ case $profile in
     ;;
   2)
     echo "Installing Full DevOps Stack..."
-    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "dotfiles" "macos-prefs")
+    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "desktop-apps" "dotfiles" "macos-prefs")
     ;;
   3)
     echo "Available components:"
@@ -30,16 +30,18 @@ case $profile in
     echo "  [2] CLI tools"
     echo "  [3] Kubernetes tools"
     echo "  [4] Cloud provider tools"
-    echo "  [5] Dotfiles"
-    echo "  [6] macOS preferences"
-    read -p "Select components (e.g., 1,2,5,6): " choices
+    echo "  [5] Desktop applications"
+    echo "  [6] Dotfiles"
+    echo "  [7] macOS preferences"
+    read -p "Select components (e.g., 1,2,5,7): " choices
     components=()
     [[ $choices =~ 1 ]] && components+=("brew")
     [[ $choices =~ 2 ]] && components+=("cli-tools")
     [[ $choices =~ 3 ]] && components+=("kubernetes")
     [[ $choices =~ 4 ]] && components+=("cloud-tools")
-    [[ $choices =~ 5 ]] && components+=("dotfiles")
-    [[ $choices =~ 6 ]] && components+=("macos-prefs")
+    [[ $choices =~ 5 ]] && components+=("desktop-apps")
+    [[ $choices =~ 6 ]] && components+=("dotfiles")
+    [[ $choices =~ 7 ]] && components+=("macos-prefs")
     ;;
   *)
     echo "Invalid choice"
@@ -72,6 +74,9 @@ for component in "${components[@]}"; do
       ;;
     cloud-tools)
       [ -f "$SCRIPT_DIR/scripts/cloud-tools.sh" ] && bash "$SCRIPT_DIR/scripts/cloud-tools.sh"
+      ;;
+    desktop-apps)
+      [ -f "$SCRIPT_DIR/scripts/desktop-apps.sh" ] && bash "$SCRIPT_DIR/scripts/desktop-apps.sh"
       ;;
     dotfiles)
       [ -f "$SCRIPT_DIR/scripts/symlink-dotfiles.sh" ] && bash "$SCRIPT_DIR/scripts/symlink-dotfiles.sh"
