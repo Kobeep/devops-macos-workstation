@@ -2,7 +2,7 @@
 
 set -e
 
-echo "Setting up CLI utilities..."
+echo "INFO ==>: Setting up CLI utilities..."
 
 tools=(
   "bat:Clone of cat with syntax highlighting"
@@ -21,21 +21,21 @@ for tool_info in "${tools[@]}"; do
   IFS=':' read -r tool desc <<< "$tool_info"
 
   if ! command -v "$tool" >/dev/null 2>&1; then
-    echo "Installing $tool ($desc)..."
+    echo "INFO ==>: Installing $tool ($desc)..."
     brew install "$tool"
   else
-    echo "✓ $tool already installed"
+    echo "INFO ==>: ✓ $tool already installed"
   fi
 done
 
 echo ""
-echo "CLI tools setup complete!"
+echo "INFO ==>: CLI tools setup complete!"
 echo ""
-echo "Try these commands:"
-echo "  bat <file>       - view file with syntax highlighting"
-echo "  eza -la          - list files with icons"
-echo "  fzf              - interactive file search"
-echo "  rg <pattern>     - fast text search"
-echo "  fd <name>        - fast file search"
-echo "  jq . <file>      - pretty print JSON"
-echo "  tldr <command>   - quick command examples"
+echo "INFO ==>: Try these commands:"
+echo "INFO ==>:   bat <file>       - view file with syntax highlighting"
+echo "INFO ==>:   eza -la          - list files with icons"
+echo "INFO ==>:   fzf              - interactive file search"
+echo "INFO ==>:   rg <pattern>     - fast text search"
+echo "INFO ==>:   fd <name>        - fast file search"
+echo "INFO ==>:   jq . <file>      - pretty print JSON"
+echo "INFO ==>:   tldr <command>   - quick command examples"

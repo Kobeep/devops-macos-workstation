@@ -10,7 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 echo "Select installation profile:"
 echo "1) Essential (brew + basic tools)"
-echo "2) Full DevOps Stack (all tools + configs)"
+echo "2) Full DevOps Stack (all tools + configs + macOS settings)"
 echo "3) Custom (choose components)"
 echo ""
 read -p "Choice [1-3]: " profile
@@ -22,7 +22,7 @@ case $profile in
     ;;
   2)
     echo "Installing Full DevOps Stack..."
-    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "dotfiles")
+    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "dotfiles" "macos-prefs")
     ;;
   3)
     echo "Available components:"
@@ -31,13 +31,15 @@ case $profile in
     echo "  [3] Kubernetes tools"
     echo "  [4] Cloud provider tools"
     echo "  [5] Dotfiles"
-    read -p "Select components (e.g., 1,2,5): " choices
+    echo "  [6] macOS preferences"
+    read -p "Select components (e.g., 1,2,5,6): " choices
     components=()
     [[ $choices =~ 1 ]] && components+=("brew")
     [[ $choices =~ 2 ]] && components+=("cli-tools")
     [[ $choices =~ 3 ]] && components+=("kubernetes")
     [[ $choices =~ 4 ]] && components+=("cloud-tools")
     [[ $choices =~ 5 ]] && components+=("dotfiles")
+    [[ $choices =~ 6 ]] && components+=("macos-prefs")
     ;;
   *)
     echo "Invalid choice"
@@ -47,18 +49,18 @@ esac
 
 for component in "${components[@]}"; do
   echo ""
-  echo "📦 Installing $component..."
+  echo "INFO ==>: 📦 Installing $component..."
 
   case $component in
     brew)
       if [ -f "$SCRIPT_DIR/scripts/brew.sh" ]; then
         bash "$SCRIPT_DIR/scripts/brew.sh"
       else
-        echo "Installing Homebrew packages from Brewfile..."
+        echo "INFO ==>: Installing Homebrew packages from Brewfile..."
         if command -v brew >/dev/null 2>&1; then
           brew bundle --file="$SCRIPT_DIR/Brewfile"
         else
-          echo "Homebrew not installed. Install from https://brew.sh"
+          echo "INFO ==>: Homebrew not installed. Install from https://brew.sh"
         fi
       fi
       ;;
@@ -74,13 +76,16 @@ for component in "${components[@]}"; do
     dotfiles)
       [ -f "$SCRIPT_DIR/scripts/symlink-dotfiles.sh" ] && bash "$SCRIPT_DIR/scripts/symlink-dotfiles.sh"
       ;;
+    macos-prefs)
+      [ -f "$SCRIPT_DIR/scripts/macos-preferences.sh" ] && bash "$SCRIPT_DIR/scripts/macos-preferences.sh"
+      ;;
   esac
 done
 
 echo ""
-echo "✅ Installation complete!"
+echo "INFO ==>: ✅ Installation complete!"
 echo ""
-echo "Next steps:"
-echo "  - Restart your terminal"
-echo "  - Run 'brew doctor' to verify setup"
-echo "  - Configure cloud provider credentials"
+echo "INFO ==>: Next steps:"
+echo "INFO ==>:   - Restart your terminal"
+echo "INFO ==>:   - Run 'brew doctor' to verify setup"
+echo "INFO ==>:   - Configure cloud provider credentials"
