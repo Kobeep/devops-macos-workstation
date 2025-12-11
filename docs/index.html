@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps macOS Workstation - Automated Setup</title>
+    <meta name="description" content="Automated setup for macOS development environment focused on DevOps workflows">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            padding: 30px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+        }
+
+        .tools-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .tool-badge {
+            background: #f0f0f0;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 DevOps macOS Workstation</h1>
+            <p class="subtitle">Automated setup for macOS development environment</p>
+            <div class="cta-buttons">
+                <a href="https://github.com/Kobeep/devops-macos-workstation" class="btn btn-primary">View on GitHub</a>
+                <a href="#getting-started" class="btn btn-secondary">Get Started</a>
+            </div>
+        </header>
+
+        <div class="content-section">
+            <h2>✨ Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Automated Installation</h3>
+                    <p>One-command setup for all your DevOps tools via Homebrew</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Dotfiles Management</h3>
+                    <p>Symlinked configurations with automatic backup</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Beautiful Terminal</h3>
+                    <p>Powerlevel10k theme with oh-my-zsh pre-configured</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Pre-configured Aliases</h3>
+                    <p>kubectl, terraform, docker, and git shortcuts</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Profile-based Setup</h3>
+                    <p>Choose Essential, Full, or Custom installation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h3>Modular Scripts</h3>
+                    <p>Separate installers for different tool categories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section" id="getting-started">
+            <h2>🎯 Quick Start</h2>
+            <p>Get up and running in minutes:</p>
+            <div class="code-block">
+                <code>git clone https://github.com/Kobeep/devops-macos-workstation.git ~/github/devops-macos-workstation<br>
+cd ~/github/devops-macos-workstation<br>
+./install.sh</code>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>🛠️ What's Included</h2>
+            <h3>Kubernetes Tools</h3>
+            <div class="tools-list">
+                <span class="tool-badge">kubectl</span>
+                <span class="tool-badge">helm</span>
+                <span class="tool-badge">k9s</span>
+                <span class="tool-badge">kubectx</span>
+                <span class="tool-badge">stern</span>
+            </div>
+
+            <h3>Cloud Provider CLIs</h3>
+            <div class="tools-list">
+                <span class="tool-badge">AWS CLI</span>
+                <span class="tool-badge">Azure CLI</span>
+                <span class="tool-badge">Google Cloud SDK</span>
+            </div>
+
+            <h3>Infrastructure as Code</h3>
+            <div class="tools-list">
+                <span class="tool-badge">Terraform</span>
+                <span class="tool-badge">Ansible</span>
+            </div>
+
+            <h3>Container Tools</h3>
+            <div class="tools-list">
+                <span class="tool-badge">Docker Desktop</span>
+                <span class="tool-badge">lazydocker</span>
+                <span class="tool-badge">dive</span>
+            </div>
+
+            <h3>CLI Utilities</h3>
+            <div class="tools-list">
+                <span class="tool-badge">bat</span>
+                <span class="tool-badge">eza</span>
+                <span class="tool-badge">fzf</span>
+                <span class="tool-badge">ripgrep</span>
+                <span class="tool-badge">jq</span>
+                <span class="tool-badge">yq</span>
+                <span class="tool-badge">htop</span>
+                <span class="tool-badge">httpie</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>Made with ❤️ for DevOps Engineers</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Licensed under MIT</p>
+        </footer>
+    </div>
+</body>
+</html>
