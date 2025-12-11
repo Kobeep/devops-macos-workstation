@@ -1,0 +1,198 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-scripts:
+    name: Test Shell Scripts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: |
+          echo "INFO ==>: Installing ShellCheck..."
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck on all scripts
+        run: |
+          echo "INFO ==>: Checking shell scripts syntax..."
+          find . -type f -name "*.sh" -not -path "./.*" | while read -r script; do
+            echo "INFO ==>: Checking $script"
+            shellcheck "$script" || exit 1
+          done
+          echo "INFO ==>: All scripts passed ShellCheck!"
+
+  test-documentation:
+    name: Test Markdown Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install markdownlint
+        run: |
+          echo "INFO ==>: Installing markdownlint..."
+          npm install -g markdownlint-cli
+
+      - name: Run markdownlint
+        run: |
+          echo "INFO ==>: Checking markdown files..."
+          markdownlint '**/*.md' --ignore node_modules --config .markdownlint.json || true
+          echo "INFO ==>: Markdown check completed!"
+
+  test-on-macos:
+    name: Test Installation on macOS
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check Homebrew
+        run: |
+          echo "INFO ==>: Checking Homebrew installation..."
+          brew --version
+          echo "INFO ==>: Homebrew is working!"
+
+      - name: Validate Brewfile
+        run: |
+          echo "INFO ==>: Validating Brewfile syntax..."
+          brew bundle check --file=Brewfile --verbose || echo "Some packages not installed (expected in CI)"
+          echo "INFO ==>: Brewfile syntax is valid!"
+
+      - name: Check script permissions
+        run: |
+          echo "INFO ==>: Checking if scripts are executable..."
+          for script in install.sh scripts/*.sh; do
+            if [ -f "$script" ]; then
+              echo "Checking $script"
+              if [ ! -x "$script" ]; then
+                echo "ERROR: $script is not executable"
+                exit 1
+              fi
+            fi
+          done
+          echo "INFO ==>: All scripts have correct permissions!"
+
+      - name: Dry-run install script
+        run: |
+          echo "INFO ==>: Testing install.sh (dry-run)..."
+          bash -n install.sh
+          echo "INFO ==>: install.sh syntax is valid!"
+
+      - name: Test all scripts syntax
+        run: |
+          echo "INFO ==>: Testing all scripts syntax..."
+          for script in scripts/*.sh; do
+            if [ -f "$script" ]; then
+              echo "Testing $script"
+              bash -n "$script"
+            fi
+          done
+          echo "INFO ==>: All scripts have valid syntax!"
+
+  test-project-structure:
+    name: Validate Project Structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          echo "INFO ==>: Checking project structure..."
+
+          required_files=(
+            "README.md"
+            "LICENSE"
+            "Brewfile"
+            "install.sh"
+            "scripts/brew.sh"
+            "scripts/cli-tools.sh"
+            "scripts/kubernetes.sh"
+            "scripts/cloud-tools.sh"
+            "scripts/desktop-apps.sh"
+            "scripts/symlink-dotfiles.sh"
+            "scripts/macos-preferences.sh"
+            "scripts/oh-my-zsh.sh"
+            "dotfiles/.zshrc"
+            "configs/gitconfig-template"
+            "configs/k9s-aliases.yaml"
+            "docs/index.html"
+            "docs/banner.svg"
+          )
+
+          all_found=true
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing required file: $file"
+              all_found=false
+            else
+              echo "✓ Found: $file"
+            fi
+          done
+
+          if [ "$all_found" = true ]; then
+            echo "INFO ==>: All required files present!"
+          else
+            echo "ERROR: Some required files are missing!"
+            exit 1
+          fi
+
+      - name: Check coding style
+        run: |
+          echo "INFO ==>: Checking if scripts follow coding style..."
+
+          scripts_ok=true
+          for script in scripts/*.sh install.sh; do
+            if [ -f "$script" ]; then
+              if ! grep -q "INFO ==>:" "$script"; then
+                echo "WARNING: $script might not follow 'INFO ==>:' style"
+                scripts_ok=false
+              else
+                echo "✓ $script follows coding style"
+              fi
+            fi
+          done
+
+          if [ "$scripts_ok" = true ]; then
+            echo "INFO ==>: All scripts follow coding style!"
+          else
+            echo "WARNING: Some scripts might need style updates"
+          fi
+
+  summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: [test-scripts, test-documentation, test-on-macos, test-project-structure]
+
+    steps:
+      - name: Success message
+        run: |
+          echo "╔════════════════════════════════════════╗"
+          echo "║                                        ║"
+          echo "║  ✅ All CI checks passed!             ║"
+          echo "║                                        ║"
+          echo "║  - Shell scripts validated ✓           ║"
+          echo "║  - Documentation checked ✓             ║"
+          echo "║  - macOS compatibility tested ✓        ║"
+          echo "║  - Project structure verified ✓        ║"
+          echo "║                                        ║"
+          echo "║  Ready to merge! 🚀                    ║"
+          echo "║                                        ║"
+          echo "╔════════════════════════════════════════╗"

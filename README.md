@@ -11,6 +11,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![CI Pipeline](https://github.com/Kobeep/devops-macos-workstation/actions/workflows/ci.yml/badge.svg)](https://github.com/Kobeep/devops-macos-workstation/actions/workflows/ci.yml)
 
 ![macOS](https://img.shields.io/badge/macOS-11.0+-blue?logo=apple&logoColor=white)
 ![Homebrew](https://img.shields.io/badge/Homebrew-required-orange?logo=homebrew&logoColor=white)
