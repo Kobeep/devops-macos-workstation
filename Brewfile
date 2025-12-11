@@ -55,3 +55,5 @@ cask "libreoffice"
 cask "maccy"
 # Video game digital distribution service
 cask "steam"
+# Open-source code editor
+cask "visual-studio-code"
