@@ -8,7 +8,6 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 zstyle ':omz:update' mode auto
 
-ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="yyyy-mm-dd"
@@ -90,5 +89,8 @@ alias gcm='git commit -m'
 alias gpl='git pull'
 alias gps='git push'
 alias glog='git log --oneline --graph --decorate'
+
+unsetopt correct_all
+unsetopt correct
 
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
