@@ -49,18 +49,18 @@ esac
 
 for component in "${components[@]}"; do
   echo ""
-  echo "📦 Installing $component..."
+  echo "INFO ==>: 📦 Installing $component..."
 
   case $component in
     brew)
       if [ -f "$SCRIPT_DIR/scripts/brew.sh" ]; then
         bash "$SCRIPT_DIR/scripts/brew.sh"
       else
-        echo "Installing Homebrew packages from Brewfile..."
+        echo "INFO ==>: Installing Homebrew packages from Brewfile..."
         if command -v brew >/dev/null 2>&1; then
           brew bundle --file="$SCRIPT_DIR/Brewfile"
         else
-          echo "Homebrew not installed. Install from https://brew.sh"
+          echo "INFO ==>: Homebrew not installed. Install from https://brew.sh"
         fi
       fi
       ;;
@@ -83,9 +83,9 @@ for component in "${components[@]}"; do
 done
 
 echo ""
-echo "✅ Installation complete!"
+echo "INFO ==>: ✅ Installation complete!"
 echo ""
-echo "Next steps:"
-echo "  - Restart your terminal"
-echo "  - Run 'brew doctor' to verify setup"
-echo "  - Configure cloud provider credentials"
+echo "INFO ==>: Next steps:"
+echo "INFO ==>:   - Restart your terminal"
+echo "INFO ==>:   - Run 'brew doctor' to verify setup"
+echo "INFO ==>:   - Configure cloud provider credentials"

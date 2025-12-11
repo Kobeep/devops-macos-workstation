@@ -2,10 +2,10 @@
 
 set -e
 
-echo "Installing Homebrew packages..."
+echo "INFO ==>: Installing Homebrew packages..."
 
 if ! command -v brew >/dev/null 2>&1; then
-  echo "Homebrew not found. Installing..."
+  echo "INFO ==>: Homebrew not found. Installing..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if [[ $(uname -m) == "arm64" ]]; then
@@ -21,14 +21,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BREWFILE="$SCRIPT_DIR/../Brewfile"
 
 if [ -f "$BREWFILE" ]; then
-  echo "Installing packages from Brewfile..."
+  echo "INFO ==>: Installing packages from Brewfile..."
   brew bundle --file="$BREWFILE"
 else
-  echo "Brewfile not found at $BREWFILE"
+  echo "INFO ==>: Brewfile not found at $BREWFILE"
   exit 1
 fi
 
-echo "Running brew cleanup..."
+echo "INFO ==>: Running brew cleanup..."
 brew cleanup
 
-echo "Homebrew setup complete!"
+echo "INFO ==>: Homebrew setup complete!"
