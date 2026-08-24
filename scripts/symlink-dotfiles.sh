@@ -2,34 +2,48 @@
 
 set -e
 
-DOTFILES_DIR="$HOME/github/devops-macos-workstation/dotfiles"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/../dotfiles" 2>/dev/null && pwd)"
 BACKUP_DIR="$HOME/.dotfiles-backup-$(date +%Y%m%d-%H%M%S)"
+BACKUP_CREATED=false
 
 echo "INFO ==>: Creating dotfiles symlinks..."
 
-if [ ! -d "$DOTFILES_DIR" ]; then
-  echo "INFO ==>: Error: dotfiles directory not found at $DOTFILES_DIR"
+if [ -z "$DOTFILES_DIR" ] || [ ! -d "$DOTFILES_DIR" ]; then
+  echo "INFO ==>: Error: dotfiles directory not found relative to $SCRIPT_DIR"
   exit 1
 fi
-
-mkdir -p "$BACKUP_DIR"
-echo "INFO ==>: Backup directory: $BACKUP_DIR"
 
 files=(".zshrc")
 
 for file in "${files[@]}"; do
-  if [ -f "$HOME/$file" ] && [ ! -L "$HOME/$file" ]; then
-    echo "INFO ==>: Backing up existing $file"
-    mv "$HOME/$file" "$BACKUP_DIR/"
+  TARGET="$HOME/$file"
+  SRC="$DOTFILES_DIR/$file"
+
+  # Check if target is already correctly symlinked
+  if [ -L "$TARGET" ] && [ "$(readlink "$TARGET")" = "$SRC" ]; then
+    echo "INFO ==>: ✓ $file is already correctly symlinked"
+    continue
   fi
 
-  if [ -L "$HOME/$file" ]; then
-    rm "$HOME/$file"
+  # Backup existing file if it's not a symlink
+  if [ -f "$TARGET" ] && [ ! -L "$TARGET" ]; then
+    if [ "$BACKUP_CREATED" = false ]; then
+      mkdir -p "$BACKUP_DIR"
+      BACKUP_CREATED=true
+      echo "INFO ==>: Backup directory created: $BACKUP_DIR"
+    fi
+    echo "INFO ==>: Backing up existing $file"
+    mv "$TARGET" "$BACKUP_DIR/"
+  elif [ -L "$TARGET" ]; then
+    rm "$TARGET"
   fi
 
   echo "INFO ==>: Linking $file"
-  ln -s "$DOTFILES_DIR/$file" "$HOME/$file"
+  ln -s "$SRC" "$TARGET"
 done
 
-echo "INFO ==>: Dotfiles linked successfully!"
-echo "INFO ==>: Backup saved to: $BACKUP_DIR"
+echo "INFO ==>: Dotfiles setup complete!"
+if [ "$BACKUP_CREATED" = true ]; then
+  echo "INFO ==>: Backup saved to: $BACKUP_DIR"
+fi

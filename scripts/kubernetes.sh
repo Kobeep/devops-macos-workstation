@@ -5,8 +5,10 @@ set -e
 echo "INFO ==>: Setting up Kubernetes tools..."
 
 if ! command -v kubectl >/dev/null 2>&1; then
-  echo "INFO ==>: kubectl not found. Install via: brew install kubernetes-cli"
-  exit 1
+  echo "INFO ==>: Installing kubectl via Homebrew..."
+  brew install kubernetes-cli
+else
+  echo "INFO ==>: ✓ kubectl already installed"
 fi
 
 echo "INFO ==>: Installing oh-my-zsh kubectl plugin..."

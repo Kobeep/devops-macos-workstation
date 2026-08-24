@@ -105,7 +105,11 @@ macOS 11.0 or later
 
 ### Quick Installation
 ```bash
+# Interactive mode
 ./install.sh
+
+# Non-interactive / Automated execution (Full DevOps Stack)
+./install.sh -p 2 -y
 ```
 
 ### Manual Component Installation
@@ -117,8 +121,9 @@ brew bundle
 ./scripts/kubernetes.sh
 ./scripts/cloud-tools.sh
 ./scripts/cli-tools.sh
+./scripts/oh-my-zsh.sh
 
-# Link dotfiles
+# Link dotfiles (idempotent, creates backup only if needed)
 ./scripts/symlink-dotfiles.sh
 ```
 
@@ -140,6 +145,7 @@ brew bundle
 
 ### Container Tools
 - Docker Desktop
+- Colima / Lima - Container runtimes
 - lazydocker - Terminal UI for Docker
 - dive - Image layer inspector
 
@@ -147,7 +153,9 @@ brew bundle
 - Terraform
 - Ansible
 
-### CLI Utilities
+### CLI Utilities & Developer Tools
+- gh - Official GitHub CLI
+- shellcheck - Shell script linter
 - bat - cat with syntax highlighting
 - eza - modern ls
 - fzf - fuzzy finder
@@ -157,6 +165,8 @@ brew bundle
 - htop - process viewer
 - httpie - HTTP client
 - tldr - simplified man pages
+- tree / broot - Directory visualization
+- git-delta - Git diff syntax highlighter
 
 ### Dotfiles
 - `.zshrc` - oh-my-zsh with 30+ plugins

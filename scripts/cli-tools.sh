@@ -5,26 +5,31 @@ set -e
 echo "INFO ==>: Setting up CLI utilities..."
 
 tools=(
-  "bat:Clone of cat with syntax highlighting"
-  "eza:Modern ls replacement"
-  "fzf:Fuzzy finder"
-  "ripgrep:Fast grep alternative"
-  "fd:Fast find alternative"
-  "jq:JSON processor"
-  "yq:YAML processor"
-  "htop:Interactive process viewer"
-  "httpie:User-friendly HTTP client"
-  "tldr:Simplified man pages"
+  "bat:bat:Clone of cat with syntax highlighting"
+  "eza:eza:Modern ls replacement"
+  "fzf:fzf:Fuzzy finder"
+  "ripgrep:rg:Fast grep alternative"
+  "fd:fd:Fast find alternative"
+  "jq:jq:JSON processor"
+  "yq:yq:YAML processor"
+  "htop:htop:Interactive process viewer"
+  "httpie:http:User-friendly HTTP client"
+  "tldr:tldr:Simplified man pages"
+  "gh:gh:GitHub official CLI"
+  "shellcheck:shellcheck:Shell script linter"
+  "tree:tree:Directory tree viewer"
+  "broot:broot:Interactive directory tree explorer"
+  "git-delta:delta:Git diff syntax-highlighting pager"
 )
 
 for tool_info in "${tools[@]}"; do
-  IFS=':' read -r tool desc <<< "$tool_info"
+  IFS=':' read -r pkg cmd desc <<< "$tool_info"
 
-  if ! command -v "$tool" >/dev/null 2>&1; then
-    echo "INFO ==>: Installing $tool ($desc)..."
-    brew install "$tool"
+  if ! command -v "$cmd" >/dev/null 2>&1; then
+    echo "INFO ==>: Installing $pkg ($desc)..."
+    brew install "$pkg"
   else
-    echo "INFO ==>: ✓ $tool already installed"
+    echo "INFO ==>: ✓ $pkg already installed"
   fi
 done
 

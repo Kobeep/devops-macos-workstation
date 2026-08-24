@@ -8,43 +8,78 @@ echo ""
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "Select installation profile:"
-echo "1) Essential (brew + basic tools)"
-echo "2) Full DevOps Stack (all tools + configs + macOS settings)"
-echo "3) Custom (choose components)"
-echo ""
-read -r -p "Choice [1-3]: " profile
+profile=""
+non_interactive=false
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -p|--profile)
+      profile="$2"
+      shift 2
+      ;;
+    -y|--yes|--non-interactive)
+      non_interactive=true
+      export NONINTERACTIVE=1
+      shift
+      ;;
+    *)
+      echo "Unknown option: $1"
+      echo "Usage: $0 [-p profile_number] [-y|--non-interactive]"
+      exit 1
+      ;;
+  esac
+done
+
+if [ -z "$profile" ]; then
+  if [ -t 0 ]; then
+    echo "Select installation profile:"
+    echo "1) Essential (brew + basic tools)"
+    echo "2) Full DevOps Stack (all tools + oh-my-zsh + configs + macOS settings)"
+    echo "3) Custom (choose components)"
+    echo ""
+    read -r -p "Choice [1-3]: " profile
+  else
+    echo "INFO ==>: Non-interactive shell detected. Defaulting to Profile 2 (Full DevOps Stack)."
+    profile="2"
+  fi
+fi
 
 case $profile in
   1)
-    echo "Installing Essential profile..."
+    echo "INFO ==>: Installing Essential profile..."
     components=("brew")
     ;;
   2)
-    echo "Installing Full DevOps Stack..."
-    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "desktop-apps" "dotfiles" "macos-prefs")
+    echo "INFO ==>: Installing Full DevOps Stack..."
+    components=("brew" "cli-tools" "kubernetes" "cloud-tools" "desktop-apps" "oh-my-zsh" "dotfiles" "macos-prefs")
     ;;
   3)
-    echo "Available components:"
-    echo "  [1] Homebrew packages"
-    echo "  [2] CLI tools"
-    echo "  [3] Kubernetes tools"
-    echo "  [4] Cloud provider tools"
-    echo "  [5] Desktop applications"
-    echo "  [6] Dotfiles"
-    echo "  [7] macOS preferences"
-    read -r -p "Select components (e.g., 1,2,5,7): " choices
+    if [ -t 0 ]; then
+      echo "Available components:"
+      echo "  [1] Homebrew packages"
+      echo "  [2] CLI tools"
+      echo "  [3] Kubernetes tools"
+      echo "  [4] Cloud provider tools"
+      echo "  [5] Desktop applications"
+      echo "  [6] Oh My Zsh & Powerlevel10k"
+      echo "  [7] Dotfiles"
+      echo "  [8] macOS preferences"
+      read -r -p "Select components (e.g., 1,2,5,6,7): " choices
+    else
+      choices="1,2,3,4,5,6,7,8"
+    fi
     components=()
     [[ $choices =~ 1 ]] && components+=("brew")
     [[ $choices =~ 2 ]] && components+=("cli-tools")
     [[ $choices =~ 3 ]] && components+=("kubernetes")
     [[ $choices =~ 4 ]] && components+=("cloud-tools")
     [[ $choices =~ 5 ]] && components+=("desktop-apps")
-    [[ $choices =~ 6 ]] && components+=("dotfiles")
-    [[ $choices =~ 7 ]] && components+=("macos-prefs")
+    [[ $choices =~ 6 ]] && components+=("oh-my-zsh")
+    [[ $choices =~ 7 ]] && components+=("dotfiles")
+    [[ $choices =~ 8 ]] && components+=("macos-prefs")
     ;;
   *)
-    echo "Invalid choice"
+    echo "ERROR: Invalid choice '$profile'"
     exit 1
     ;;
 esac
@@ -78,11 +113,20 @@ for component in "${components[@]}"; do
     desktop-apps)
       [ -f "$SCRIPT_DIR/scripts/desktop-apps.sh" ] && bash "$SCRIPT_DIR/scripts/desktop-apps.sh"
       ;;
+    oh-my-zsh)
+      [ -f "$SCRIPT_DIR/scripts/oh-my-zsh.sh" ] && bash "$SCRIPT_DIR/scripts/oh-my-zsh.sh"
+      ;;
     dotfiles)
       [ -f "$SCRIPT_DIR/scripts/symlink-dotfiles.sh" ] && bash "$SCRIPT_DIR/scripts/symlink-dotfiles.sh"
       ;;
     macos-prefs)
-      [ -f "$SCRIPT_DIR/scripts/macos-preferences.sh" ] && bash "$SCRIPT_DIR/scripts/macos-preferences.sh"
+      if [ -f "$SCRIPT_DIR/scripts/macos-preferences.sh" ]; then
+        if [ "$non_interactive" = true ]; then
+          bash "$SCRIPT_DIR/scripts/macos-preferences.sh" -y
+        else
+          bash "$SCRIPT_DIR/scripts/macos-preferences.sh"
+        fi
+      fi
       ;;
   esac
 done

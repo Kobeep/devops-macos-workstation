@@ -6,10 +6,20 @@ echo "INFO ==>: Configuring macOS system preferences..."
 echo "INFO ==>: Note: Some changes require logout/restart to take effect"
 echo ""
 
-read -p "Apply macOS system preferences? (y/n):" -n 1 -r
-echo
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-  echo "INFO ==>: Skipped macOS preferences"
+AUTO_YES=false
+if [[ "$1" == "-y" ]] || [[ "$1" == "--yes" ]] || [[ "${NONINTERACTIVE}" == "1" ]]; then
+  AUTO_YES=true
+fi
+
+if [ "$AUTO_YES" = false ] && [ -t 0 ]; then
+  read -p "Apply macOS system preferences? (y/n): " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "INFO ==>: Skipped macOS preferences"
+    exit 0
+  fi
+elif [ "$AUTO_YES" = false ]; then
+  echo "INFO ==>: Non-interactive shell detected without -y/--yes. Skipping macOS preferences prompt."
   exit 0
 fi
 

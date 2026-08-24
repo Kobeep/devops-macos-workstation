@@ -9,10 +9,14 @@ if ! command -v brew >/dev/null 2>&1; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   if [[ $(uname -m) == "arm64" ]]; then
-    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    if ! grep -q "brew shellenv" ~/.zprofile 2>/dev/null; then
+      echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    fi
     eval "$(/opt/homebrew/bin/brew shellenv)"
   else
-    echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
+    if ! grep -q "brew shellenv" ~/.zprofile 2>/dev/null; then
+      echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
+    fi
     eval "$(/usr/local/bin/brew shellenv)"
   fi
 fi
